@@ -185,52 +185,62 @@ public class LostItemExample {
             return (Criteria) this;
         }
 
-        public Criteria andCategoryEqualTo(Byte value) {
+        public Criteria andCategoryEqualTo(String value) {
             addCriterion("category =", value, "category");
             return (Criteria) this;
         }
 
-        public Criteria andCategoryNotEqualTo(Byte value) {
+        public Criteria andCategoryNotEqualTo(String value) {
             addCriterion("category <>", value, "category");
             return (Criteria) this;
         }
 
-        public Criteria andCategoryGreaterThan(Byte value) {
+        public Criteria andCategoryGreaterThan(String value) {
             addCriterion("category >", value, "category");
             return (Criteria) this;
         }
 
-        public Criteria andCategoryGreaterThanOrEqualTo(Byte value) {
+        public Criteria andCategoryGreaterThanOrEqualTo(String value) {
             addCriterion("category >=", value, "category");
             return (Criteria) this;
         }
 
-        public Criteria andCategoryLessThan(Byte value) {
+        public Criteria andCategoryLessThan(String value) {
             addCriterion("category <", value, "category");
             return (Criteria) this;
         }
 
-        public Criteria andCategoryLessThanOrEqualTo(Byte value) {
+        public Criteria andCategoryLessThanOrEqualTo(String value) {
             addCriterion("category <=", value, "category");
             return (Criteria) this;
         }
 
-        public Criteria andCategoryIn(List<Byte> values) {
+        public Criteria andCategoryLike(String value) {
+            addCriterion("category like", value, "category");
+            return (Criteria) this;
+        }
+
+        public Criteria andCategoryNotLike(String value) {
+            addCriterion("category not like", value, "category");
+            return (Criteria) this;
+        }
+
+        public Criteria andCategoryIn(List<String> values) {
             addCriterion("category in", values, "category");
             return (Criteria) this;
         }
 
-        public Criteria andCategoryNotIn(List<Byte> values) {
+        public Criteria andCategoryNotIn(List<String> values) {
             addCriterion("category not in", values, "category");
             return (Criteria) this;
         }
 
-        public Criteria andCategoryBetween(Byte value1, Byte value2) {
+        public Criteria andCategoryBetween(String value1, String value2) {
             addCriterion("category between", value1, value2, "category");
             return (Criteria) this;
         }
 
-        public Criteria andCategoryNotBetween(Byte value1, Byte value2) {
+        public Criteria andCategoryNotBetween(String value1, String value2) {
             addCriterion("category not between", value1, value2, "category");
             return (Criteria) this;
         }

@@ -1,26 +1,37 @@
 package com.jianghuling.lostandfound.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.Date;
 
 public class LostItem {
+    @JsonProperty(value="item_id")
     private String itemId;
 
-    private Byte category;
+    @JsonIgnore
+    private String category;
 
     private String takePlace;
 
     private String finderPhone;
 
+    @JsonProperty(value = "pic_url")
     private String itemPicture;
 
+    @JsonProperty(value="desc")
     private String itemDesc;
 
+    @JsonIgnore
     private Date releaseTime;
 
+    @JsonIgnore
     private Date claimTime;
 
+    @JsonIgnore
     private String takerId;
 
+    @JsonIgnore
     private Byte state;
 
     public String getItemId() {
@@ -31,12 +42,12 @@ public class LostItem {
         this.itemId = itemId == null ? null : itemId.trim();
     }
 
-    public Byte getCategory() {
+    public String getCategory() {
         return category;
     }
 
-    public void setCategory(Byte category) {
-        this.category = category;
+    public void setCategory(String category) {
+        this.category = category == null ? null : category.trim();
     }
 
     public String getTakePlace() {

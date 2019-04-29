@@ -16,14 +16,18 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @RequestMapping("/account")
 public class AccountController {
 
-    @Autowired
     private AccountService accountService;
-    @Autowired
     private LostCardService lostCardService;
-    @Autowired
     private ResultMessage resultMessage;
-    @Autowired
     private LoginResultMessage loginResultMessage;
+
+    @Autowired
+    public AccountController(AccountService accountService, LostCardService lostCardService, ResultMessage resultMessage, LoginResultMessage loginResultMessage) {
+        this.accountService = accountService;
+        this.lostCardService = lostCardService;
+        this.resultMessage = resultMessage;
+        this.loginResultMessage = loginResultMessage;
+    }
 
     @ResponseBody
     @RequestMapping("/login")
