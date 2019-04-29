@@ -53,5 +53,18 @@ public class AccountController {
 
     }
 
+    @ResponseBody
+    @RequestMapping("/firstEntrance")
+    public LoginResultMessage firstEntrance(String userId,String university){
+
+        if (accountService.bindUniversity(userId,university)) {
+            loginResultMessage.setCode(Constant.SUCCESS);
+            loginResultMessage.setLostCardList(lostCardService.getLostCardList(0,10));
+        }else{
+            loginResultMessage.setCode(Constant.FAIL);
+            loginResultMessage.setMessage("绑定学校错误");
+        }
+        return loginResultMessage;
+    }
 
 }

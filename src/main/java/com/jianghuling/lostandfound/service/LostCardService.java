@@ -15,15 +15,17 @@ import java.util.List;
 @Service
 public class LostCardService {
 
-    @Autowired
     private LostStuCardMapper lostStuCardMapper;
-    @Autowired
     private SelfDefMapper selfDefMapper;
 
-
+    @Autowired
+    public LostCardService(LostStuCardMapper lostStuCardMapper, SelfDefMapper selfDefMapper) {
+        this.lostStuCardMapper = lostStuCardMapper;
+        this.selfDefMapper = selfDefMapper;
+    }
 
     @Transactional
     public List<LostStuCard> getLostCardList(int pageNo, int pageSize) {
-        return selfDefMapper.selectLostCard(pageNo*pageSize,pageSize);
+        return selfDefMapper.selectLostCard(pageNo * pageSize, pageSize);
     }
 }

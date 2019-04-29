@@ -1,5 +1,6 @@
 package com.jianghuling.lostandfound.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -13,6 +14,7 @@ public class LostStuCard {
     private String college;
 
     @JsonProperty("time")
+    @JsonFormat(timezone = "GMT+8", pattern = "MM-dd HH:mm")
     private Date releaseTime;
 
     private String stuId;

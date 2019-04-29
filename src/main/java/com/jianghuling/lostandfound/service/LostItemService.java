@@ -12,12 +12,16 @@ import java.util.List;
 @Service
 @Slf4j
 public class LostItemService {
-    @Autowired
     private LostItemMapper lostItemMapper;
-    @Autowired
     private SelfDefMapper selfDefMapper;
 
-    public List<LostItem> getLostItem(int pageNo,int pageSize){
+    @Autowired
+    public LostItemService(LostItemMapper lostItemMapper, SelfDefMapper selfDefMapper) {
+        this.lostItemMapper = lostItemMapper;
+        this.selfDefMapper = selfDefMapper;
+    }
+
+    public List<LostItem> getLostItem(int pageNo, int pageSize){
         return selfDefMapper.selectLostItem(pageNo*pageSize,pageSize);
     }
 }

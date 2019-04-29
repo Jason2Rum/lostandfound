@@ -26,22 +26,23 @@ import static com.jianghuling.lostandfound.Constant.*;
 @Service
 public class AccountService {
 
-
-
-    @Autowired
     private UserInfoMapper userInfoMapper;
-    @Autowired
     private ResultMessage resultMessage;
 
+    @Autowired
+    public AccountService(UserInfoMapper userInfoMapper, ResultMessage resultMessage) {
+        this.userInfoMapper = userInfoMapper;
+        this.resultMessage = resultMessage;
+    }
+
     /**
-     *
      * @param jsCode
      * @return 用户id 与 是否首次登录flag
      * @throws Exception
      */
     @Transactional
     public ResultMessage login(String jsCode) throws Exception {
-        String result ;
+        String result;
         result = getOpenidAndSessionKey(jsCode);
 
         JSONObject jsonObject = JSON.parseObject(result);
@@ -49,9 +50,9 @@ public class AccountService {
 
         UserInfo userInfo = userInfoMapper.selectByPrimaryKey(openid);
         resultMessage.setMessage(openid);
-        if(userInfo!=null){//非第一次登录
+        if (userInfo != null) {//非第一次登录
             resultMessage.setCode(SUCCESS);
-        }else{//第一次登录
+        } else {//第一次登录
             userInfo = new UserInfo();
             userInfo.setUserId(openid);
             resultMessage.setCode(FIRST_LOG_IN);
@@ -92,5 +93,15 @@ public class AccountService {
             }
         }
         return result;
+    }
+
+    @Transactional
+    public boolean bindUniversity(String userId, String university) {
+        UserInfo u = new UserInfo();
+        u.setUserId(userId);
+        u.setUniversity(university);
+        if (userInfoMapper.updateByPrimaryKeySelective(u) != 0)
+            return true;
+        else return false;
     }
 }

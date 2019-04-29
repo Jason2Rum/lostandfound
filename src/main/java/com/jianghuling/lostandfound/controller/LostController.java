@@ -26,6 +26,14 @@ public class LostController {
 
     private LostItemListResultMessage lostItemListResultMessage;
 
+    @Autowired
+    public LostController(LostItemService lostItemService, LostCardService lostCardService, LostCardListResultMessage lostCardListResultMessage, LostItemListResultMessage lostItemListResultMessage) {
+        this.lostItemService = lostItemService;
+        this.lostCardService = lostCardService;
+        this.lostCardListResultMessage = lostCardListResultMessage;
+        this.lostItemListResultMessage = lostItemListResultMessage;
+    }
+
     @RequestMapping("/showInfo")
     @ResponseBody
     public ResultMessage getLost(String category,int pageNo,int pageSize){

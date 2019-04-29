@@ -1,12 +1,13 @@
 package com.jianghuling.lostandfound.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.Date;
 
 public class LostItem {
-    @JsonProperty(value="item_id")
+    @JsonProperty(value = "item_id")
     private String itemId;
 
     @JsonIgnore
@@ -19,10 +20,11 @@ public class LostItem {
     @JsonProperty(value = "pic_url")
     private String itemPicture;
 
-    @JsonProperty(value="desc")
+    @JsonProperty(value = "desc")
     private String itemDesc;
 
     @JsonIgnore
+    @JsonFormat(timezone = "GMT+8", pattern = "MM-dd HH:mm")
     private Date releaseTime;
 
     @JsonIgnore
