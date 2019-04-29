@@ -3,8 +3,13 @@ package com.jianghuling.lostandfound.dao;
 import com.jianghuling.lostandfound.model.UserInfo;
 import com.jianghuling.lostandfound.model.UserInfoExample;
 import java.util.List;
-import org.apache.ibatis.annotations.Param;
 
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
+
+@Repository
+@Mapper
 public interface UserInfoMapper {
     long countByExample(UserInfoExample example);
 

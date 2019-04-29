@@ -7,6 +7,10 @@ public class UserInfo {
 
     private String university;
 
+    private String college;
+
+    private String name;
+
     public String getUserId() {
         return userId;
     }
@@ -29,5 +33,21 @@ public class UserInfo {
 
     public void setUniversity(String university) {
         this.university = university == null ? null : university.trim();
+    }
+
+    public String getCollege() {
+        return college;
+    }
+
+    public void setCollege(String college) {
+        this.college = college == null ? null : college.trim();
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name == null ? null : name.trim();
     }
 }

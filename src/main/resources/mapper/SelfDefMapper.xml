@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jianghuling.lostandfound.dao.SelfDefMapper">
+
+    <resultMap id="BaseLostStuCard" type="com.jianghuling.lostandfound.model.LostStuCard">
+        <id column="id" jdbcType="VARCHAR" property="id" />
+        <result column="name" jdbcType="VARCHAR" property="name" />
+        <result column="college" jdbcType="VARCHAR" property="college" />
+        <result column="release_time" jdbcType="TIMESTAMP" property="releaseTime" />
+        <result column="stu_id" jdbcType="CHAR" property="stuId" />
+        <result column="take_time" jdbcType="TIMESTAMP" property="takeTime" />
+        <result column="taker_id" jdbcType="VARCHAR" property="takerId" />
+        <result column="state" jdbcType="TINYINT" property="state" />
+        <result column="take_place" jdbcType="VARCHAR" property="takePlace" />
+    </resultMap>
+
+    <sql id="Lost_Card_Column_List">
+    id, name, college, release_time, stu_id, take_time, taker_id, state, take_place
+  </sql>
+
+    <select id="selectLostCard" resultMap="BaseLostStuCard">
+        select
+        <include refid="Lost_Card_Column_List"/>
+        from stu_card_lost
+        order by releast_time desc limit #{startIndex},#{pageSize}
+    </select>
+
+</mapper>

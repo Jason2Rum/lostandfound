@@ -21,6 +21,8 @@ public class LostItem {
 
     private String takerId;
 
+    private Byte state;
+
     public String getItemId() {
         return itemId;
     }
@@ -91,5 +93,13 @@ public class LostItem {
 
     public void setTakerId(String takerId) {
         this.takerId = takerId == null ? null : takerId.trim();
+    }
+
+    public Byte getState() {
+        return state;
+    }
+
+    public void setState(Byte state) {
+        this.state = state;
     }
 }

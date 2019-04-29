@@ -1,5 +1,8 @@
 package com.jianghuling.lostandfound.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.Date;
 
 public class LostStuCard {
@@ -9,13 +12,21 @@ public class LostStuCard {
 
     private String college;
 
+    @JsonProperty("time")
     private Date releaseTime;
 
     private String stuId;
 
+    @JsonIgnore
     private Date takeTime;
 
+    @JsonIgnore
     private String takerId;
+
+    @JsonIgnore
+    private Byte state;
+
+    private String takePlace;
 
     public String getId() {
         return id;
@@ -71,5 +82,21 @@ public class LostStuCard {
 
     public void setTakerId(String takerId) {
         this.takerId = takerId == null ? null : takerId.trim();
+    }
+
+    public Byte getState() {
+        return state;
+    }
+
+    public void setState(Byte state) {
+        this.state = state;
+    }
+
+    public String getTakePlace() {
+        return takePlace;
+    }
+
+    public void setTakePlace(String takePlace) {
+        this.takePlace = takePlace == null ? null : takePlace.trim();
     }
 }

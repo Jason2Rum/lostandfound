@@ -14,7 +14,10 @@ server:
       suffix: .log
   servlet:
     context-path: /
-
+mybatis:
+  mapper-locations: /mapper/**Mapper.xml
+  type-aliases-package: com.jianghuling.lostandfound
+  config-location: /mybatis-config.xml
 spring:
   jackson:
     # get correct time

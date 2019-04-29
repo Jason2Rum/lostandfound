@@ -1,0 +1,4 @@
+<plugins>
+    <plugin interceptor="cn.com.dingding.common.utils.PageInterceptor">
+    </plugin>
+</plugins>

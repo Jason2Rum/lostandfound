@@ -574,6 +574,136 @@ public class LostStuCardExample {
             addCriterion("taker_id not between", value1, value2, "takerId");
             return (Criteria) this;
         }
+
+        public Criteria andStateIsNull() {
+            addCriterion("state is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andStateIsNotNull() {
+            addCriterion("state is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andStateEqualTo(Byte value) {
+            addCriterion("state =", value, "state");
+            return (Criteria) this;
+        }
+
+        public Criteria andStateNotEqualTo(Byte value) {
+            addCriterion("state <>", value, "state");
+            return (Criteria) this;
+        }
+
+        public Criteria andStateGreaterThan(Byte value) {
+            addCriterion("state >", value, "state");
+            return (Criteria) this;
+        }
+
+        public Criteria andStateGreaterThanOrEqualTo(Byte value) {
+            addCriterion("state >=", value, "state");
+            return (Criteria) this;
+        }
+
+        public Criteria andStateLessThan(Byte value) {
+            addCriterion("state <", value, "state");
+            return (Criteria) this;
+        }
+
+        public Criteria andStateLessThanOrEqualTo(Byte value) {
+            addCriterion("state <=", value, "state");
+            return (Criteria) this;
+        }
+
+        public Criteria andStateIn(List<Byte> values) {
+            addCriterion("state in", values, "state");
+            return (Criteria) this;
+        }
+
+        public Criteria andStateNotIn(List<Byte> values) {
+            addCriterion("state not in", values, "state");
+            return (Criteria) this;
+        }
+
+        public Criteria andStateBetween(Byte value1, Byte value2) {
+            addCriterion("state between", value1, value2, "state");
+            return (Criteria) this;
+        }
+
+        public Criteria andStateNotBetween(Byte value1, Byte value2) {
+            addCriterion("state not between", value1, value2, "state");
+            return (Criteria) this;
+        }
+
+        public Criteria andTakePlaceIsNull() {
+            addCriterion("take_place is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTakePlaceIsNotNull() {
+            addCriterion("take_place is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTakePlaceEqualTo(String value) {
+            addCriterion("take_place =", value, "takePlace");
+            return (Criteria) this;
+        }
+
+        public Criteria andTakePlaceNotEqualTo(String value) {
+            addCriterion("take_place <>", value, "takePlace");
+            return (Criteria) this;
+        }
+
+        public Criteria andTakePlaceGreaterThan(String value) {
+            addCriterion("take_place >", value, "takePlace");
+            return (Criteria) this;
+        }
+
+        public Criteria andTakePlaceGreaterThanOrEqualTo(String value) {
+            addCriterion("take_place >=", value, "takePlace");
+            return (Criteria) this;
+        }
+
+        public Criteria andTakePlaceLessThan(String value) {
+            addCriterion("take_place <", value, "takePlace");
+            return (Criteria) this;
+        }
+
+        public Criteria andTakePlaceLessThanOrEqualTo(String value) {
+            addCriterion("take_place <=", value, "takePlace");
+            return (Criteria) this;
+        }
+
+        public Criteria andTakePlaceLike(String value) {
+            addCriterion("take_place like", value, "takePlace");
+            return (Criteria) this;
+        }
+
+        public Criteria andTakePlaceNotLike(String value) {
+            addCriterion("take_place not like", value, "takePlace");
+            return (Criteria) this;
+        }
+
+        public Criteria andTakePlaceIn(List<String> values) {
+            addCriterion("take_place in", values, "takePlace");
+            return (Criteria) this;
+        }
+
+        public Criteria andTakePlaceNotIn(List<String> values) {
+            addCriterion("take_place not in", values, "takePlace");
+            return (Criteria) this;
+        }
+
+        public Criteria andTakePlaceBetween(String value1, String value2) {
+            addCriterion("take_place between", value1, value2, "takePlace");
+            return (Criteria) this;
+        }
+
+        public Criteria andTakePlaceNotBetween(String value1, String value2) {
+            addCriterion("take_place not between", value1, value2, "takePlace");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {
