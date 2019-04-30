@@ -774,6 +774,76 @@ public class LostItemExample {
             addCriterion("state not between", value1, value2, "state");
             return (Criteria) this;
         }
+
+        public Criteria andReleaserIdIsNull() {
+            addCriterion("releaser_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andReleaserIdIsNotNull() {
+            addCriterion("releaser_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andReleaserIdEqualTo(String value) {
+            addCriterion("releaser_id =", value, "releaserId");
+            return (Criteria) this;
+        }
+
+        public Criteria andReleaserIdNotEqualTo(String value) {
+            addCriterion("releaser_id <>", value, "releaserId");
+            return (Criteria) this;
+        }
+
+        public Criteria andReleaserIdGreaterThan(String value) {
+            addCriterion("releaser_id >", value, "releaserId");
+            return (Criteria) this;
+        }
+
+        public Criteria andReleaserIdGreaterThanOrEqualTo(String value) {
+            addCriterion("releaser_id >=", value, "releaserId");
+            return (Criteria) this;
+        }
+
+        public Criteria andReleaserIdLessThan(String value) {
+            addCriterion("releaser_id <", value, "releaserId");
+            return (Criteria) this;
+        }
+
+        public Criteria andReleaserIdLessThanOrEqualTo(String value) {
+            addCriterion("releaser_id <=", value, "releaserId");
+            return (Criteria) this;
+        }
+
+        public Criteria andReleaserIdLike(String value) {
+            addCriterion("releaser_id like", value, "releaserId");
+            return (Criteria) this;
+        }
+
+        public Criteria andReleaserIdNotLike(String value) {
+            addCriterion("releaser_id not like", value, "releaserId");
+            return (Criteria) this;
+        }
+
+        public Criteria andReleaserIdIn(List<String> values) {
+            addCriterion("releaser_id in", values, "releaserId");
+            return (Criteria) this;
+        }
+
+        public Criteria andReleaserIdNotIn(List<String> values) {
+            addCriterion("releaser_id not in", values, "releaserId");
+            return (Criteria) this;
+        }
+
+        public Criteria andReleaserIdBetween(String value1, String value2) {
+            addCriterion("releaser_id between", value1, value2, "releaserId");
+            return (Criteria) this;
+        }
+
+        public Criteria andReleaserIdNotBetween(String value1, String value2) {
+            addCriterion("releaser_id not between", value1, value2, "releaserId");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

@@ -13,6 +13,7 @@
         <result column="claim_time" jdbcType="TIMESTAMP" property="claimTime"/>
         <result column="taker_id" jdbcType="VARCHAR" property="takerId"/>
         <result column="state" jdbcType="TINYINT" property="state"/>
+        <result column="releaser_id" jdbcType="VARCHAR" property="releaserId" />
     </resultMap>
 
     <resultMap id="LostStuCardResultMap" type="com.jianghuling.lostandfound.model.LostStuCard">
@@ -25,14 +26,15 @@
         <result column="taker_id" jdbcType="VARCHAR" property="takerId"/>
         <result column="state" jdbcType="TINYINT" property="state"/>
         <result column="take_place" jdbcType="VARCHAR" property="takePlace"/>
+        <result column="releaser_id" jdbcType="VARCHAR" property="releaserId" />
     </resultMap>
 
     <sql id="Lost_Card_Column_List">
-    id, name, college, release_time, stu_id, take_time, taker_id, state, take_place
+    id, name, college, release_time, stu_id, take_time, taker_id, state, take_place,releaser_id
   </sql>
 
     <sql id="Lost_Item_Column_List">
-    item_id, category, take_place, finder_phone, item_picture, item_desc, release_time,
+    item_id, category, take_place, finder_phone, item_picture, item_desc, release_time,releaser_id
     claim_time, taker_id, state
   </sql>
 

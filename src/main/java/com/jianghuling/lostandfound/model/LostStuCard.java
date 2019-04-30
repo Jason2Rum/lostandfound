@@ -3,9 +3,13 @@ package com.jianghuling.lostandfound.model;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.apache.ibatis.annotations.Mapper;
+import org.springframework.stereotype.Repository;
 
 import java.util.Date;
 
+@Mapper
+@Repository
 public class LostStuCard {
     private String id;
 
@@ -29,6 +33,9 @@ public class LostStuCard {
     private Byte state;
 
     private String takePlace;
+
+    @JsonIgnore
+    private String releaserId;
 
     public String getId() {
         return id;
@@ -100,5 +107,13 @@ public class LostStuCard {
 
     public void setTakePlace(String takePlace) {
         this.takePlace = takePlace == null ? null : takePlace.trim();
+    }
+
+    public String getReleaserId() {
+        return releaserId;
+    }
+
+    public void setReleaserId(String releaserId) {
+        this.releaserId = releaserId == null ? null : releaserId.trim();
     }
 }

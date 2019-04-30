@@ -46,7 +46,7 @@
 
 <!--        <table tableName="user_info" domainObjectName="UserInfo"/>-->
         <table tableName="item_lost" domainObjectName="LostItem"/>
-<!--        <table tableName="stu_card_lost" domainObjectName="LostStuCard"/>-->
+        <table tableName="stu_card_lost" domainObjectName="LostStuCard"/>
 
 
 
