@@ -8,6 +8,7 @@ public class Constant {
     public static final String SECRET = "";
     public static final byte HAS_CLAIMED = new Byte("1");
     public static final byte NO_CLAIM = new Byte("0");
-    public static final String UPLOAD_IMG_LOC= "/home/jianghuling/lostandfound/itemimages";
+    public static final String UPLOAD_IMG_LOC= "/home/jianghuling/lostandfound/itemimages/";
+    public static final String PIC_ACCESS_PREFIX="http://119.23.203.8/lostimages/";
 
 }

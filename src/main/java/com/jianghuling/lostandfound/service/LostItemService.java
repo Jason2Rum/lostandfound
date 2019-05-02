@@ -13,6 +13,7 @@ import java.io.File;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
@@ -31,7 +32,11 @@ public class LostItemService {
     }
 
     public List<LostItem> getLostItem(int pageNo, int pageSize) {
-        return selfDefMapper.selectLostItem(pageNo * pageSize, pageSize);
+        List<LostItem> list = selfDefMapper.selectLostItem(pageNo * pageSize, pageSize);
+        for(LostItem item:list){
+            item.setItemPicture(PIC_ACCESS_PREFIX+item.getItemPicture());
+        }
+        return list;
     }
 
     /**
