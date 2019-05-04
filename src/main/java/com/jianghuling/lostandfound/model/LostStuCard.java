@@ -37,6 +37,8 @@ public class LostStuCard {
     @JsonIgnore
     private String releaserId;
 
+    private Date updateTime;
+
     public String getId() {
         return id;
     }
@@ -115,5 +117,13 @@ public class LostStuCard {
 
     public void setReleaserId(String releaserId) {
         this.releaserId = releaserId == null ? null : releaserId.trim();
+    }
+
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
     }
 }

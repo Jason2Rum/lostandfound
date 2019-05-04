@@ -3,13 +3,9 @@ package com.jianghuling.lostandfound.model;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.apache.ibatis.annotations.Mapper;
-import org.springframework.stereotype.Repository;
 
 import java.util.Date;
 
-@Mapper
-@Repository
 public class LostItem {
     @JsonProperty(value = "item_id")
     private String itemId;
@@ -27,7 +23,6 @@ public class LostItem {
     @JsonProperty(value = "desc")
     private String itemDesc;
 
-    @JsonIgnore
     @JsonFormat(timezone = "GMT+8", pattern = "MM-dd HH:mm")
     private Date releaseTime;
 
@@ -42,6 +37,8 @@ public class LostItem {
 
     @JsonIgnore
     private String releaserId;
+
+    private Date updateTime;
 
     public String getItemId() {
         return itemId;
@@ -129,5 +126,13 @@ public class LostItem {
 
     public void setReleaserId(String releaserId) {
         this.releaserId = releaserId == null ? null : releaserId.trim();
+    }
+
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
     }
 }

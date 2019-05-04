@@ -43,7 +43,7 @@
         <include refid="Lost_Card_Column_List"/>
         from stu_card_lost
         where state=0
-        order by releast_time desc limit #{startIndex},#{pageSize}
+        order by release_time desc limit #{startIndex},#{pageSize}
     </select>
 
     <select id="selectLostItem" resultMap="LostItemResultMap">

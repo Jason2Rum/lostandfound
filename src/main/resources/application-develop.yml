@@ -17,7 +17,6 @@ server:
 mybatis:
   mapper-locations: /mapper/**Mapper.xml
   type-aliases-package: com.jianghuling.lostandfound
-  config-location: /mybatis-config.xml
 spring:
   jackson:
     # get correct time
@@ -35,4 +34,7 @@ spring:
       idle-timeout: 60000
       maximum-pool-size: 15
       max-lifetime: 60000
+  data:
+    elasticsearch:
+      cluster-nodes: 119.23.203.8:9300
 

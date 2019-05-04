@@ -14,6 +14,6 @@ public interface SelfDefMapper {
 
     List<LostStuCard> selectLostCard(@Param("startIndex")int startIndex,@Param("pageSize") int pageSize);
 
-    List<LostItem> selectLostItem(@Param("startIndex")int startIndex,@Param("PageSize") int pageSize);
+    List<LostItem> selectLostItem(@Param("startIndex")int startIndex, @Param("PageSize") int pageSize);
 
 }
