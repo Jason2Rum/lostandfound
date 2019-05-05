@@ -14,7 +14,7 @@ public class ESLostStuCard implements Serializable {
     @Field(type = FieldType.Keyword)
     private String name;
 
-    @Field(type = FieldType.Text,analyzer = "ik_smart")
+    @Field(type = FieldType.Text)
     private String college;
 
     @Id

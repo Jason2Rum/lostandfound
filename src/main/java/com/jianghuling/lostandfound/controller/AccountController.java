@@ -67,4 +67,18 @@ public class AccountController {
         return loginResultMessage;
     }
 
+    @RequestMapping("/bindUniv")
+    @ResponseBody
+    public ResultMessage bindUniv(String userId,String university){
+        if (accountService.bindUniversity(userId,university)) {
+            resultMessage.setCode(Constant.SUCCESS);
+
+        }else {
+            resultMessage.setCode(Constant.FAIL);
+            resultMessage.setMessage("绑定学校失败");
+        }
+        return resultMessage;
+    }
+
+
 }

@@ -21,6 +21,7 @@ public class LostStuCard {
     @JsonFormat(timezone = "GMT+8", pattern = "MM-dd HH:mm")
     private Date releaseTime;
 
+    @JsonIgnore
     private String stuId;
 
     @JsonIgnore
@@ -32,11 +33,13 @@ public class LostStuCard {
     @JsonIgnore
     private Byte state;
 
+    @JsonProperty("take_place")
     private String takePlace;
 
     @JsonIgnore
     private String releaserId;
 
+    @JsonIgnore
     private Date updateTime;
 
     public String getId() {

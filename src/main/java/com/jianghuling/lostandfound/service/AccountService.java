@@ -100,7 +100,7 @@ public class AccountService {
         UserInfo u = new UserInfo();
         u.setUserId(userId);
         u.setUniversity(university);
-        if (userInfoMapper.updateByPrimaryKeySelective(u) != 0)
+        if (userInfoMapper.updateByPrimaryKeySelective(u) == 1)
             return true;
         else return false;
     }

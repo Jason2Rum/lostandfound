@@ -4,6 +4,7 @@ package com.jianghuling.lostandfound.controller;
 import com.jianghuling.lostandfound.Constant;
 import com.jianghuling.lostandfound.model.ESLostItem;
 import com.jianghuling.lostandfound.model.LostItem;
+import com.jianghuling.lostandfound.model.LostStuCard;
 import com.jianghuling.lostandfound.result.LostCardListResultMessage;
 import com.jianghuling.lostandfound.result.LostItemListResultMessage;
 import com.jianghuling.lostandfound.result.ResultMessage;
@@ -51,10 +52,19 @@ public class LostController {
             return lostCardListResultMessage;
         }else{
             lostItemListResultMessage.setCode(Constant.SUCCESS);
-            lostItemListResultMessage.setLostItemList(lostItemService.getLostItem(pageNo,pageSize));
+            lostItemListResultMessage.setLostItemList(lostItemService.getLostItem(category,pageNo,pageSize));
             return lostItemListResultMessage;
         }
 
+    }
+
+    @RequestMapping("/searchcard")
+    @ResponseBody
+    public LostCardListResultMessage searchCard(String name){
+        List<LostStuCard>  lostStuCards = lostCardService.search(name);
+        lostCardListResultMessage.setCode(Constant.SUCCESS);
+        lostCardListResultMessage.setLostStuCardList(lostStuCards);
+        return lostCardListResultMessage;
     }
 
     @RequestMapping("/claim/item")
@@ -66,6 +76,14 @@ public class LostController {
             resultMessage.setCode(Constant.FAIL);
             resultMessage.setMessage("已被其他人领取");
         }
+        return resultMessage;
+    }
+
+    @RequestMapping("/claim/card")
+    @ResponseBody
+    public ResultMessage claimCard(String userId,String cardId){
+        lostCardService.claimCard(userId,cardId);
+        resultMessage.setCode(Constant.SUCCESS);
         return resultMessage;
     }
 
@@ -107,7 +125,7 @@ public class LostController {
             LostItem lostItem = new LostItem();
             lostItem.setItemId(esLostItem.getItemId());
             lostItem.setItemPicture(esLostItem.getItemPicture());
-            lostItem.setItemDesc(esLostItem.getItemPicture());
+            lostItem.setItemDesc(esLostItem.getItemDesc());
             lostItem.setTakePlace(esLostItem.getTakePlace());
             lostItemList.add(lostItem);
         }

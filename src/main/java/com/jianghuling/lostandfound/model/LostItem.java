@@ -15,6 +15,7 @@ public class LostItem {
 
     private String takePlace;
 
+    @JsonIgnore
     private String finderPhone;
 
     @JsonProperty(value = "pic_url")
@@ -38,6 +39,7 @@ public class LostItem {
     @JsonIgnore
     private String releaserId;
 
+    @JsonIgnore
     private Date updateTime;
 
     public String getItemId() {

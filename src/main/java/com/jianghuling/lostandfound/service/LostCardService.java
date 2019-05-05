@@ -7,15 +7,19 @@ import com.jianghuling.lostandfound.model.ESLostStuCard;
 import com.jianghuling.lostandfound.model.LostStuCard;
 import com.jianghuling.lostandfound.model.LostStuCardExample;
 import com.jianghuling.lostandfound.result.LostCardListResultMessage;
+import com.jianghuling.lostandfound.result.ResultMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Time;
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
+
+import static com.jianghuling.lostandfound.Constant.HAS_CLAIMED;
 
 @Slf4j
 @Service
@@ -61,5 +65,17 @@ public class LostCardService {
         LostStuCardExample lostStuCardExample = new LostStuCardExample();
         lostStuCardExample.createCriteria().andNameEqualTo(name);
         return lostStuCardMapper.selectByExample(lostStuCardExample);
+    }
+
+    @Transactional
+    public boolean claimCard(String userId,String cardId){
+        LostStuCard lostStuCard = new LostStuCard();
+        lostStuCard.setId(cardId);
+        lostStuCard.setTakeTime(new Timestamp(new Date().getTime()));
+        lostStuCard.setTakerId(userId);
+        lostStuCard.setState(HAS_CLAIMED);
+        lostStuCardMapper.updateByPrimaryKeySelective(lostStuCard);
+
+        return true;
     }
 }

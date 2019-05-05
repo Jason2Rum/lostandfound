@@ -3,39 +3,41 @@
 <mapper namespace="com.jianghuling.lostandfound.dao.SelfDefMapper">
 
     <resultMap id="LostItemResultMap" type="com.jianghuling.lostandfound.model.LostItem">
-        <id column="item_id" jdbcType="VARCHAR" property="itemId"/>
-        <result column="category" jdbcType="TINYINT" property="category"/>
-        <result column="take_place" jdbcType="VARCHAR" property="takePlace"/>
-        <result column="finder_phone" jdbcType="VARCHAR" property="finderPhone"/>
-        <result column="item_picture" jdbcType="VARCHAR" property="itemPicture"/>
-        <result column="item_desc" jdbcType="VARCHAR" property="itemDesc"/>
-        <result column="release_time" jdbcType="TIMESTAMP" property="releaseTime"/>
-        <result column="claim_time" jdbcType="TIMESTAMP" property="claimTime"/>
-        <result column="taker_id" jdbcType="VARCHAR" property="takerId"/>
-        <result column="state" jdbcType="TINYINT" property="state"/>
+        <id column="item_id" jdbcType="VARCHAR" property="itemId" />
+        <result column="category" jdbcType="VARCHAR" property="category" />
+        <result column="take_place" jdbcType="VARCHAR" property="takePlace" />
+        <result column="finder_phone" jdbcType="VARCHAR" property="finderPhone" />
+        <result column="item_picture" jdbcType="VARCHAR" property="itemPicture" />
+        <result column="item_desc" jdbcType="VARCHAR" property="itemDesc" />
+        <result column="release_time" jdbcType="TIMESTAMP" property="releaseTime" />
+        <result column="claim_time" jdbcType="TIMESTAMP" property="claimTime" />
+        <result column="taker_id" jdbcType="VARCHAR" property="takerId" />
+        <result column="state" jdbcType="TINYINT" property="state" />
         <result column="releaser_id" jdbcType="VARCHAR" property="releaserId" />
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
     </resultMap>
 
     <resultMap id="LostStuCardResultMap" type="com.jianghuling.lostandfound.model.LostStuCard">
-        <id column="id" jdbcType="VARCHAR" property="id"/>
-        <result column="name" jdbcType="VARCHAR" property="name"/>
-        <result column="college" jdbcType="VARCHAR" property="college"/>
-        <result column="release_time" jdbcType="TIMESTAMP" property="releaseTime"/>
-        <result column="stu_id" jdbcType="CHAR" property="stuId"/>
-        <result column="take_time" jdbcType="TIMESTAMP" property="takeTime"/>
-        <result column="taker_id" jdbcType="VARCHAR" property="takerId"/>
-        <result column="state" jdbcType="TINYINT" property="state"/>
-        <result column="take_place" jdbcType="VARCHAR" property="takePlace"/>
+        <id column="id" jdbcType="VARCHAR" property="id" />
+        <result column="name" jdbcType="VARCHAR" property="name" />
+        <result column="college" jdbcType="VARCHAR" property="college" />
+        <result column="release_time" jdbcType="TIMESTAMP" property="releaseTime" />
+        <result column="stu_id" jdbcType="CHAR" property="stuId" />
+        <result column="take_time" jdbcType="TIMESTAMP" property="takeTime" />
+        <result column="taker_id" jdbcType="VARCHAR" property="takerId" />
+        <result column="state" jdbcType="TINYINT" property="state" />
+        <result column="take_place" jdbcType="VARCHAR" property="takePlace" />
         <result column="releaser_id" jdbcType="VARCHAR" property="releaserId" />
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
     </resultMap>
 
     <sql id="Lost_Card_Column_List">
-    id, name, college, release_time, stu_id, take_time, taker_id, state, take_place,releaser_id
-  </sql>
+    id, name, college, release_time, stu_id, take_time, taker_id, state, take_place,
+    releaser_id, update_time  </sql>
 
     <sql id="Lost_Item_Column_List">
-    item_id, category, take_place, finder_phone, item_picture, item_desc, release_time,releaser_id
-    claim_time, taker_id, state
+        item_id, category, take_place, finder_phone, item_picture, item_desc, release_time,
+    claim_time, taker_id, state, releaser_id, update_time
   </sql>
 
     <select id="selectLostCard" resultMap="LostStuCardResultMap">
@@ -50,7 +52,7 @@
         select
         <include refid="Lost_Item_Column_List"/>
         from item_lost
-        where category=#{catetory} and state=0
+        where category = #{category} and state=0
         order by release_time desc limit #{startIndex},#{pageSize}
 
     </select>

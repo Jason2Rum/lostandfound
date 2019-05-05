@@ -35,8 +35,8 @@ public class LostItemService {
         this.esLostItemRepository = esLostItemRepository;
     }
 
-    public List<LostItem> getLostItem(int pageNo, int pageSize) {
-        List<LostItem> list = selfDefMapper.selectLostItem(pageNo * pageSize, pageSize);
+    public List<LostItem> getLostItem(String category,int pageNo, int pageSize) {
+        List<LostItem> list = selfDefMapper.selectLostItem(pageNo * pageSize, pageSize,category);
         for(LostItem item:list){
             item.setItemPicture(PIC_ACCESS_PREFIX+item.getItemPicture());
         }
@@ -76,7 +76,8 @@ public class LostItemService {
             String time = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
             String fileName = time + oriFileName.substring(oriFileName.lastIndexOf("."));
             File dest = new File(UPLOAD_IMG_LOC + fileName);
-            File temp = new File(UPLOAD_IMG_LOC + fileName+"temp");
+            File temp = new File(UPLOAD_IMG_LOC +"temp"+ fileName);
+            picFile.transferTo(temp);
             if (!dest.getParentFile().exists()) {
                 dest.getParentFile().mkdirs();
             }
@@ -93,7 +94,9 @@ public class LostItemService {
             lostItem.setItemId(UUID.randomUUID().toString());
             lostItem.setCategory(category);
             lostItem.setTakePlace(claimMethod);
+            lostItem.setState(NO_CLAIM);
             lostItem.setItemDesc(desc);
+            lostItem.setItemPicture("http://jianghuling.top/lostimages/"+dest.getName());
             lostItem.setReleaseTime(new Timestamp(new Date().getTime()));
             lostItem.setReleaserId(userId);
             //发布时间数据库有默认的now()
@@ -101,8 +104,8 @@ public class LostItemService {
             /*------插入到索引------------*/
             ESLostItem esLostItem = new ESLostItem();
             esLostItem.setItemDesc(desc);
+            esLostItem.setItemId(lostItem.getItemId());
             esLostItem.setReleaseTime(lostItem.getReleaseTime());
-            esLostItem.setItemDesc(lostItem.getItemId());
             esLostItem.setItemPicture(lostItem.getItemPicture());
             esLostItem.setTakePlace(lostItem.getTakePlace());
 
@@ -114,6 +117,6 @@ public class LostItemService {
     }
 
     public List<ESLostItem> search(String description){
-        return esLostItemRepository.findByItemDesc(description);
+        return esLostItemRepository.findTop5ByItemDesc(description);
     }
 }
