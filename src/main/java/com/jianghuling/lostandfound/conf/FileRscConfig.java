@@ -13,11 +13,11 @@ import static com.jianghuling.lostandfound.Constant.UPLOAD_IMG_LOC;
 
 @Configuration
 public class FileRscConfig implements WebMvcConfigurer {
-    ;
+
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry){
-        registry.addResourceHandler("/lostimages/**").addResourceLocations("/home/jianghuling/lostandfound/itemimages");
+        registry.addResourceHandler("/lostimages/**").addResourceLocations("file:/home/lostandfound/itemimages/");
     }
 
     @Bean

@@ -3,7 +3,7 @@ server:
   tomcat:
     accesslog:
       buffered: true
-      directory: E:/IDEAProject/lostandfound/logs
+      directory: /var/logs/lostandfound/
       enabled: true
       file-date-format: .yyyy-MM-dd
       pattern: common
@@ -39,4 +39,6 @@ spring:
       cluster-nodes: 119.23.203.8:9300
       repositories:
         enabled: true
+  resources:
+    static-locations: classpath:/lostimages/
 

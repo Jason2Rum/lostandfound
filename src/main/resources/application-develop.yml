@@ -3,7 +3,7 @@ server:
   tomcat:
     accesslog:
       buffered: true
-      directory: /var/logs/lostandfound/
+      directory: E:/IDEAProject/lostandfound/logs
       enabled: true
       file-date-format: .yyyy-MM-dd
       pattern: common
