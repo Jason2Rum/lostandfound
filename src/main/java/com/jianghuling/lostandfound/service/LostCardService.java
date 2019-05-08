@@ -2,8 +2,7 @@ package com.jianghuling.lostandfound.service;
 
 import com.jianghuling.lostandfound.dao.LostStuCardMapper;
 import com.jianghuling.lostandfound.dao.SelfDefMapper;
-import com.jianghuling.lostandfound.model.LostItem;
-import com.jianghuling.lostandfound.model.LostItemExample;
+
 import com.jianghuling.lostandfound.model.LostStuCard;
 import com.jianghuling.lostandfound.model.LostStuCardExample;
 import lombok.extern.slf4j.Slf4j;

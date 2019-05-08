@@ -66,7 +66,7 @@ public class LostController {
 
     }
 
-    @RequestMapping("/searchcard")
+    @RequestMapping("/searchCard")
     public LostCardListResultMessage searchCard(String name) {
         List<LostStuCard> lostStuCards = lostCardService.search(name);
         lostCardListResultMessage.setCode(Constant.SUCCESS);
@@ -154,17 +154,17 @@ public class LostController {
 
     @RequestMapping("/myPick")
     public LostResultMessage myPick(String userId, int pageNo, int pageSize) {
+        List<LostItem> lostItems = lostItemService.myPickItems(userId);
+        List<LostStuCard> lostStuCards = lostCardService.myPickCard(userId);
 
-        List<LostItem> lostItems = lostItemService.myLostItem(userId);
-        List<LostStuCard> lostStuCards = lostCardService.myLostCard(userId);
         return dataResort(lostItems, lostStuCards, pageNo, pageSize);
+
     }
 
     @RequestMapping("/myLost")
     public LostResultMessage myLost(String userId, int pageNo, int pageSize) {
-        List<LostItem> lostItems = lostItemService.myPickItems(userId);
-        List<LostStuCard> lostStuCards = lostCardService.myPickCard(userId);
-
+        List<LostItem> lostItems = lostItemService.myLostItem(userId);
+        List<LostStuCard> lostStuCards = lostCardService.myLostCard(userId);
         return dataResort(lostItems, lostStuCards, pageNo, pageSize);
     }
 

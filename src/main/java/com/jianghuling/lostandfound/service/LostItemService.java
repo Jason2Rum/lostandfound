@@ -1,6 +1,5 @@
 package com.jianghuling.lostandfound.service;
 
-import com.jianghuling.lostandfound.Constant;
 import com.jianghuling.lostandfound.dao.ESLostItemRepository;
 import com.jianghuling.lostandfound.dao.LostItemMapper;
 import com.jianghuling.lostandfound.dao.SelfDefMapper;
@@ -84,7 +83,6 @@ public class LostItemService {
             if (!dest.getParentFile().exists()) {
                 dest.getParentFile().mkdirs();
             }
-//            picFile.transferTo(dest);
             Thumbnails.of(temp)
                     .scale(1f)
                     .outputFormat("jpg")
@@ -140,13 +138,13 @@ public class LostItemService {
 
     public List<LostItem> myPickItems(String userId){
         LostItemExample lostItemExample =new LostItemExample();
-        lostItemExample.createCriteria().andReleaserIdEqualTo(userId);
+        lostItemExample.createCriteria().andReleaserIdEqualTo(userId);//也显示取消的
         return lostItemMapper.selectByExample(lostItemExample);
     }
 
     public List<LostItem> myLostItem(String userId){
         LostItemExample lostItemExample =new LostItemExample();
-        lostItemExample.createCriteria().andTakerIdEqualTo(userId);
+        lostItemExample.createCriteria().andTakerIdEqualTo(userId).andStateNotEqualTo(NO_CLAIM);
         return lostItemMapper.selectByExample(lostItemExample);
     }
 
@@ -165,14 +163,23 @@ public class LostItemService {
 
     @Transactional
     public boolean cancelClaim(String itemId){
-        LostItem lostItem = new LostItem();
+        LostItem lostItem = lostItemMapper.selectByPrimaryKey(itemId);
         lostItem.setItemId(itemId);
         lostItem.setState(NO_CLAIM);
-        if(lostItemMapper.updateByPrimaryKeySelective(lostItem)==1){
+
+        ESLostItem esLostItem = new ESLostItem();
+        esLostItem.setItemDesc(lostItem.getItemDesc());
+        esLostItem.setItemId(lostItem.getItemId());
+        esLostItem.setReleaseTime(lostItem.getReleaseTime());
+        esLostItem.setItemPicture(lostItem.getItemPicture());
+        esLostItem.setTakePlace(lostItem.getTakePlace());
+        esLostItemRepository.save(esLostItem);
+        if(lostItemMapper.updateByPrimaryKey(lostItem)==1){
             return true;
         }else{
             return false;
         }
     }
+
 
 }

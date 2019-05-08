@@ -38,7 +38,7 @@ public class CustomerController {
     }
 
     @ResponseBody
-    @RequestMapping("/allcomment")
+    @RequestMapping("/allComment")
     public List<UserComment> allComment(){
         return customerService.getAllComment();
     }
