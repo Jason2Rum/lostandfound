@@ -6,6 +6,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.jianghuling.lostandfound.Constant;
 import com.jianghuling.lostandfound.dao.UserInfoMapper;
 import com.jianghuling.lostandfound.model.UserInfo;
+import com.jianghuling.lostandfound.result.MineResultMessage;
 import com.jianghuling.lostandfound.result.ResultMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.List;
 
 import static com.jianghuling.lostandfound.Constant.*;
 
@@ -40,6 +42,7 @@ public class AccountService {
      * @return 用户id 与 是否首次登录flag
      * @throws Exception
      */
+
     @Transactional
     public ResultMessage login(String jsCode) throws Exception {
         String result;
@@ -49,14 +52,15 @@ public class AccountService {
         String openid = jsonObject.getString("openid");
 
         UserInfo userInfo = userInfoMapper.selectByPrimaryKey(openid);
-        resultMessage.setMessage(openid);
         if (userInfo != null) {//非第一次登录
             resultMessage.setCode(SUCCESS);
         } else {//第一次登录
             userInfo = new UserInfo();
             userInfo.setUserId(openid);
+            userInfoMapper.insertSelective(userInfo);
             resultMessage.setCode(FIRST_LOG_IN);
         }
+        resultMessage.setMessage(openid);
         return resultMessage;
     }
 
@@ -104,4 +108,51 @@ public class AccountService {
             return true;
         else return false;
     }
+
+    @Transactional
+    public boolean bindCollege(String userId ,String college ){
+        UserInfo u = new UserInfo();
+        u.setCollege(college);
+        u.setUserId(userId);
+        if (userInfoMapper.updateByPrimaryKeySelective(u) == 1)
+            return true;
+        else return false;
+    }
+
+    @Transactional
+    public boolean bindStuId(String userId,String stuId){
+        UserInfo u = new UserInfo();
+        u.setUserId(userId);
+        u.setStuId(stuId);
+        if (userInfoMapper.updateByPrimaryKeySelective(u) == 1)
+            return true;
+        else return false;
+    }
+
+    @Transactional
+    public boolean bindPhone(String userId,String phone){
+        UserInfo u = new UserInfo();
+        u.setPhone(phone);
+        u.setUserId(userId);
+        if (userInfoMapper.updateByPrimaryKeySelective(u) == 1)
+            return true;
+        else return false;
+    }
+
+    public UserInfo getUserInfo(String userId){
+        return userInfoMapper.selectByPrimaryKey(userId);
+    }
+
+    @Transactional
+    public boolean bindName(String userId,String name){
+        UserInfo u = new UserInfo();
+        u.setName(name);
+        u.setUserId(userId);
+        if (userInfoMapper.updateByPrimaryKeySelective(u) == 1)
+            return true;
+        else return false;
+    }
+
+
+
 }

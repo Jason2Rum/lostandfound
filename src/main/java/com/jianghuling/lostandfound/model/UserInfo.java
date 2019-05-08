@@ -1,6 +1,7 @@
 package com.jianghuling.lostandfound.model;
 
 public class UserInfo {
+
     private String userId;
 
     private String stuId;
@@ -10,6 +11,8 @@ public class UserInfo {
     private String college;
 
     private String name;
+
+    private String phone;
 
     public String getUserId() {
         return userId;
@@ -49,5 +52,13 @@ public class UserInfo {
 
     public void setName(String name) {
         this.name = name == null ? null : name.trim();
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone == null ? null : phone.trim();
     }
 }

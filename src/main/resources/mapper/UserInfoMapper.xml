@@ -7,6 +7,7 @@
     <result column="university" jdbcType="VARCHAR" property="university" />
     <result column="college" jdbcType="VARCHAR" property="college" />
     <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="phone" jdbcType="VARCHAR" property="phone" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -67,7 +68,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    user_id, stu_id, university, college, name
+    user_id, stu_id, university, college, name, phone
   </sql>
   <select id="selectByExample" parameterType="com.jianghuling.lostandfound.model.UserInfoExample" resultMap="BaseResultMap">
     select
@@ -101,9 +102,11 @@
   </delete>
   <insert id="insert" parameterType="com.jianghuling.lostandfound.model.UserInfo">
     insert into user_info (user_id, stu_id, university, 
-      college, name)
+      college, name, phone
+      )
     values (#{userId,jdbcType=VARCHAR}, #{stuId,jdbcType=CHAR}, #{university,jdbcType=VARCHAR}, 
-      #{college,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR})
+      #{college,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.jianghuling.lostandfound.model.UserInfo">
     insert into user_info
@@ -123,6 +126,9 @@
       <if test="name != null">
         name,
       </if>
+      <if test="phone != null">
+        phone,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="userId != null">
@@ -139,6 +145,9 @@
       </if>
       <if test="name != null">
         #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null">
+        #{phone,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -166,6 +175,9 @@
       <if test="record.name != null">
         name = #{record.name,jdbcType=VARCHAR},
       </if>
+      <if test="record.phone != null">
+        phone = #{record.phone,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -177,7 +189,8 @@
       stu_id = #{record.stuId,jdbcType=CHAR},
       university = #{record.university,jdbcType=VARCHAR},
       college = #{record.college,jdbcType=VARCHAR},
-      name = #{record.name,jdbcType=VARCHAR}
+      name = #{record.name,jdbcType=VARCHAR},
+      phone = #{record.phone,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -197,6 +210,9 @@
       <if test="name != null">
         name = #{name,jdbcType=VARCHAR},
       </if>
+      <if test="phone != null">
+        phone = #{phone,jdbcType=VARCHAR},
+      </if>
     </set>
     where user_id = #{userId,jdbcType=VARCHAR}
   </update>
@@ -205,7 +221,8 @@
     set stu_id = #{stuId,jdbcType=CHAR},
       university = #{university,jdbcType=VARCHAR},
       college = #{college,jdbcType=VARCHAR},
-      name = #{name,jdbcType=VARCHAR}
+      name = #{name,jdbcType=VARCHAR},
+      phone = #{phone,jdbcType=VARCHAR}
     where user_id = #{userId,jdbcType=VARCHAR}
   </update>
 </mapper>

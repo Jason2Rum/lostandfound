@@ -52,7 +52,7 @@
         select
         <include refid="Lost_Item_Column_List"/>
         from item_lost
-        where category = #{category} and state=0
+        where category = #{categor}y and state=0
         order by release_time desc limit #{startIndex},#{pageSize}
 
     </select>

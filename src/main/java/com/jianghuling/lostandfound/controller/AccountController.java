@@ -1,10 +1,14 @@
 package com.jianghuling.lostandfound.controller;
 
 import com.jianghuling.lostandfound.Constant;
+import com.jianghuling.lostandfound.model.UserInfo;
 import com.jianghuling.lostandfound.result.LoginResultMessage;
+import com.jianghuling.lostandfound.result.MineResultMessage;
+import com.jianghuling.lostandfound.result.PrivateInfoResultMessage;
 import com.jianghuling.lostandfound.result.ResultMessage;
 import com.jianghuling.lostandfound.service.AccountService;
 import com.jianghuling.lostandfound.service.LostCardService;
+import com.jianghuling.lostandfound.service.LostItemService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,22 +18,28 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Slf4j
 @Controller
 @RequestMapping("/account")
+@ResponseBody
 public class AccountController {
 
     private AccountService accountService;
     private LostCardService lostCardService;
     private ResultMessage resultMessage;
     private LoginResultMessage loginResultMessage;
+    private LostItemService lostItemService;
+    private MineResultMessage mineResultMessage;
 
     @Autowired
-    public AccountController(AccountService accountService, LostCardService lostCardService, ResultMessage resultMessage, LoginResultMessage loginResultMessage) {
+    public AccountController(AccountService accountService, LostCardService lostCardService, ResultMessage resultMessage, LoginResultMessage loginResultMessage, LostItemService lostItemService, MineResultMessage mineResultMessage) {
         this.accountService = accountService;
         this.lostCardService = lostCardService;
         this.resultMessage = resultMessage;
         this.loginResultMessage = loginResultMessage;
+        this.lostItemService = lostItemService;
+        this.mineResultMessage = mineResultMessage;
     }
 
-    @ResponseBody
+
+
     @RequestMapping("/login")
     public LoginResultMessage login(String jscode) {
         try {
@@ -53,7 +63,6 @@ public class AccountController {
 
     }
 
-    @ResponseBody
     @RequestMapping("/firstEntrance")
     public LoginResultMessage firstEntrance(String userId,String university){
 
@@ -68,7 +77,6 @@ public class AccountController {
     }
 
     @RequestMapping("/bindUniv")
-    @ResponseBody
     public ResultMessage bindUniv(String userId,String university){
         if (accountService.bindUniversity(userId,university)) {
             resultMessage.setCode(Constant.SUCCESS);
@@ -79,4 +87,76 @@ public class AccountController {
         }
         return resultMessage;
     }
+
+    @RequestMapping("/bindCollege")
+    public ResultMessage bindCollege(String userId,String college){
+        if (accountService.bindCollege(userId,college)) {
+            resultMessage.setCode(Constant.SUCCESS);
+
+        }else {
+            resultMessage.setCode(Constant.FAIL);
+            resultMessage.setMessage("绑定学院失败");
+        }
+        return resultMessage;
+    }
+
+    @RequestMapping("/bindPhone")
+    public ResultMessage bindPhone(String userId,String phone){
+        if (accountService.bindPhone(userId,phone)) {
+            resultMessage.setCode(Constant.SUCCESS);
+
+        }else {
+            resultMessage.setCode(Constant.FAIL);
+            resultMessage.setMessage("绑定手机失败");
+        }
+        return resultMessage;
+    }
+
+    @RequestMapping("/bindStuId")
+    public ResultMessage bindStuId(String userId,String stuId){
+        if (accountService.bindStuId(userId,stuId)) {
+            resultMessage.setCode(Constant.SUCCESS);
+
+        }else {
+            resultMessage.setCode(Constant.FAIL);
+            resultMessage.setMessage("绑定学号失败");
+        }
+        return resultMessage;
+    }
+
+    @RequestMapping("/privateInfo")
+    public PrivateInfoResultMessage getUserInfo(String userId){
+        UserInfo u = accountService.getUserInfo(userId);
+        PrivateInfoResultMessage res = new PrivateInfoResultMessage();
+        res.setCollege(u.getCollege());
+        res.setName(u.getName());
+        res.setPhone(u.getPhone());
+        res.setStuId(u.getStuId());
+        res.setUniversity(u.getUniversity());
+        res.setCode(Constant.SUCCESS);
+        return res;
+    }
+
+    @RequestMapping("/mine")
+    public MineResultMessage getMine(String userId){
+        mineResultMessage.setFindNum(lostCardService.myPickCardCount(userId)+lostItemService.myPickItemCount(userId));
+        mineResultMessage.setLostNum(lostCardService.myLostCardCount(userId)+lostItemService.myLostItemCount(userId));
+        mineResultMessage.setCode(Constant.SUCCESS);
+        return mineResultMessage;
+    }
+
+    @RequestMapping("/bindName")
+    public ResultMessage bindName(String userId,String name){
+        if (accountService.bindName(userId,name)) {
+            resultMessage.setCode(Constant.SUCCESS);
+
+        }else {
+            resultMessage.setCode(Constant.FAIL);
+            resultMessage.setMessage("绑定姓名失败");
+        }
+        return resultMessage;
+    }
+
+
+
 }

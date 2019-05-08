@@ -1,15 +1,15 @@
 package com.jianghuling.lostandfound.service;
 
+import com.jianghuling.lostandfound.Constant;
 import com.jianghuling.lostandfound.dao.ESLostItemRepository;
 import com.jianghuling.lostandfound.dao.LostItemMapper;
 import com.jianghuling.lostandfound.dao.SelfDefMapper;
-import com.jianghuling.lostandfound.model.ESLostItem;
-import com.jianghuling.lostandfound.model.LostItem;
-import com.jianghuling.lostandfound.model.LostItemExample;
+import com.jianghuling.lostandfound.model.*;
 import lombok.extern.slf4j.Slf4j;
 import net.coobird.thumbnailator.Thumbnails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -35,10 +35,11 @@ public class LostItemService {
         this.esLostItemRepository = esLostItemRepository;
     }
 
+    @Transactional
     public List<LostItem> getLostItem(String category,int pageNo, int pageSize) {
         List<LostItem> list = selfDefMapper.selectLostItem(pageNo * pageSize, pageSize,category);
         for(LostItem item:list){
-            item.setItemPicture(PIC_ACCESS_PREFIX+item.getItemPicture());
+            item.setItemPicture(item.getItemPicture());
         }
         return list;
     }
@@ -50,6 +51,7 @@ public class LostItemService {
      * @param itemId 丢失物品id
      * @return 利用state充当乐观锁标记
      */
+    @Transactional
     public boolean claim(String userId, String itemId) {
         Date date = new Date();
         Timestamp timestamp = new Timestamp(date.getTime());
@@ -68,6 +70,7 @@ public class LostItemService {
         else return false;
     }
 
+    @Transactional
     public boolean publishNewLostItem(String category, String desc, String claimMethod, MultipartFile picFile,String userId) throws Exception {
         if (picFile.isEmpty()) {
             return false;
@@ -96,7 +99,7 @@ public class LostItemService {
             lostItem.setTakePlace(claimMethod);
             lostItem.setState(NO_CLAIM);
             lostItem.setItemDesc(desc);
-            lostItem.setItemPicture("http://jianghuling.top/lostimages/"+dest.getName());
+            lostItem.setItemPicture("http://jianghuling.top/lostimages/"+ UUID.randomUUID().toString().substring(0,10)+dest.getName());
             lostItem.setReleaseTime(new Timestamp(new Date().getTime()));
             lostItem.setReleaserId(userId);
             //发布时间数据库有默认的now()
@@ -109,14 +112,67 @@ public class LostItemService {
             esLostItem.setItemPicture(lostItem.getItemPicture());
             esLostItem.setTakePlace(lostItem.getTakePlace());
 
-            lostItemMapper.insert(lostItem);
+            lostItemMapper.insertSelective(lostItem);
             esLostItemRepository.save(esLostItem);
 
             return true;
         }
     }
 
+    @Transactional
     public List<ESLostItem> search(String description){
+
         return esLostItemRepository.findTop5ByItemDesc(description);
     }
+
+    @Transactional
+    public boolean cancelPublish(String itemId){
+        LostItem lostItem = new LostItem();
+        lostItem.setItemId(itemId);
+        lostItem.setState(CANCEL);
+        esLostItemRepository.deleteById(itemId);//从es中删除索引
+        if(lostItemMapper.updateByPrimaryKeySelective(lostItem)==1){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    public List<LostItem> myPickItems(String userId){
+        LostItemExample lostItemExample =new LostItemExample();
+        lostItemExample.createCriteria().andReleaserIdEqualTo(userId);
+        return lostItemMapper.selectByExample(lostItemExample);
+    }
+
+    public List<LostItem> myLostItem(String userId){
+        LostItemExample lostItemExample =new LostItemExample();
+        lostItemExample.createCriteria().andTakerIdEqualTo(userId);
+        return lostItemMapper.selectByExample(lostItemExample);
+    }
+
+    public long myLostItemCount(String userId){
+        LostItemExample lostItemExample = new LostItemExample();
+        lostItemExample.createCriteria().andTakerIdEqualTo(userId);
+        return lostItemMapper.countByExample(lostItemExample);
+    }
+
+    public long myPickItemCount(String userId){
+        LostItemExample lostItemExample = new LostItemExample();
+        lostItemExample.createCriteria().andReleaserIdEqualTo(userId).andStateNotEqualTo(CANCEL);
+        return lostItemMapper.countByExample(lostItemExample);
+
+    }
+
+    @Transactional
+    public boolean cancelClaim(String itemId){
+        LostItem lostItem = new LostItem();
+        lostItem.setItemId(itemId);
+        lostItem.setState(NO_CLAIM);
+        if(lostItemMapper.updateByPrimaryKeySelective(lostItem)==1){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
 }

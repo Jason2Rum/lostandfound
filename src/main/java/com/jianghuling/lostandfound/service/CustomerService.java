@@ -6,6 +6,7 @@ import com.jianghuling.lostandfound.model.UserCommentExample;
 import com.jianghuling.lostandfound.result.ResultMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -19,6 +20,7 @@ public class CustomerService {
         this.userCommentMapper = userCommentMapper;
     }
 
+    @Transactional
     public boolean comment(String content, String phone)throws  Exception{
         UserComment userComment = new UserComment();
         userComment.setCommentContent(content);
@@ -26,6 +28,7 @@ public class CustomerService {
         userCommentMapper.insert(userComment);
         return true;
     }
+
 
     public List<UserComment> getAllComment(){
         UserCommentExample userCommentExample = new UserCommentExample();
