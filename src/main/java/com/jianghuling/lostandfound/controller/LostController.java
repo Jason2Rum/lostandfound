@@ -177,6 +177,7 @@ public class LostController {
             temp.setCategory(o.getCategory());
             temp.setId(o.getItemId());
             temp.setDescription(o.getItemDesc());
+            temp.setState(o.getState());
             temp.setTakePlace(o.getTakePlace());
             temp.setReleaseTime(o.getReleaseTime());
             lostList.add(temp);
@@ -185,6 +186,7 @@ public class LostController {
             LostTemplate temp = new LostTemplate();
             temp.setCategory("校园卡");
             temp.setId(o.getId());
+            temp.setState(o.getState());
             temp.setDescription(o.getCollege() + " " + o.getName());
             temp.setTakePlace(o.getTakePlace());
             temp.setReleaseTime(o.getReleaseTime());

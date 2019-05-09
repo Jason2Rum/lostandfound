@@ -10,7 +10,6 @@ public class LostItem {
     @JsonProperty(value = "item_id")
     private String itemId;
 
-    @JsonIgnore
     private String category;
 
     private String takePlace;

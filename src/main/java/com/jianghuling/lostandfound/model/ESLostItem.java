@@ -29,6 +29,17 @@ public class ESLostItem implements Serializable  {
     @JsonFormat(timezone = "GMT+8", pattern = "MM-dd HH:mm")
     private Date releaseTime;
 
+    @Field(type = FieldType.Text, analyzer = "ik_max_word")
+    private String category;
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
     public String getItemId() {
         return itemId;
     }
