@@ -85,7 +85,7 @@ public class LostCardService {
         lostStuCard.setState(CANCEL);
         LostStuCardExample lostStuCardExample = new LostStuCardExample();
         lostStuCardExample.createCriteria().andIdEqualTo(cardId).andStateNotEqualTo(HAS_CLAIMED);
-        if(lostStuCardMapper.updateByExample(lostStuCard,lostStuCardExample)==1){
+        if(lostStuCardMapper.updateByExampleSelective(lostStuCard,lostStuCardExample)==1){
             return true;
         }else{
             return false;

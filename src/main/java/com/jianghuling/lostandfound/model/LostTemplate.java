@@ -6,8 +6,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.Date;
 
-import static com.jianghuling.lostandfound.Constant.NO_CLAIM;
-
 
 public class LostTemplate implements Comparable {
     private String category;
