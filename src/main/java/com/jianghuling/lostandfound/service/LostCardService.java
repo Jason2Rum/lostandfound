@@ -1,5 +1,6 @@
 package com.jianghuling.lostandfound.service;
 
+import com.jianghuling.lostandfound.Constant;
 import com.jianghuling.lostandfound.dao.LostStuCardMapper;
 import com.jianghuling.lostandfound.dao.SelfDefMapper;
 
@@ -105,9 +106,14 @@ public class LostCardService {
     }
 
 
+    /**
+     * 我丢失的卡，状态只能是已经认领的
+     * @param userId
+     * @return
+     */
     public List<LostStuCard> myLostCard(String userId){
         LostStuCardExample lostStuCardExample = new LostStuCardExample();
-        lostStuCardExample.createCriteria().andTakerIdEqualTo(userId);
+        lostStuCardExample.createCriteria().andTakerIdEqualTo(userId).andStateEqualTo(HAS_CLAIMED);
         return lostStuCardMapper.selectByExample(lostStuCardExample);
     }
 
@@ -117,12 +123,22 @@ public class LostCardService {
         return lostStuCardMapper.selectByExample(lostStuCardExample);
     }
 
+    /**
+     * 我丢失的卡的数量，状态只能是已经认领的
+     * @param userId
+     * @return
+     */
     public long myLostCardCount(String userId){
         LostStuCardExample lostStuCardExample = new LostStuCardExample();
-        lostStuCardExample.createCriteria().andTakerIdEqualTo(userId);
+        lostStuCardExample.createCriteria().andTakerIdEqualTo(userId).andStateEqualTo(HAS_CLAIMED);
         return lostStuCardMapper.countByExample(lostStuCardExample);
     }
 
+    /**
+     * 我捡到的卡的数量（包括“在发布”和“认领了”的）状态不能是取消的
+     * @param userId
+     * @return
+     */
     public long myPickCardCount(String userId){
         LostStuCardExample lostStuCardExample = new LostStuCardExample();
         lostStuCardExample.createCriteria().andReleaserIdEqualTo(userId).andStateNotEqualTo(CANCEL);
@@ -132,22 +148,33 @@ public class LostCardService {
     @Transactional
     public boolean cancelClaim(String cardId){
         LostStuCard lostStuCard = new LostStuCard();
-        lostStuCard.setId(cardId);
         lostStuCard.setState(NO_CLAIM);
-        if(lostStuCardMapper.updateByPrimaryKeySelective(lostStuCard)==1){
+
+        LostStuCardExample lostStuCardExample = new LostStuCardExample();
+        lostStuCardExample.createCriteria().andIdEqualTo(cardId).andStateEqualTo(HAS_CLAIMED);
+
+        if(lostStuCardMapper.updateByExampleSelective(lostStuCard,lostStuCardExample)==1){
             return true;
         }else return false;
     }
 
+    /**
+     * 计算所有丢失的卡片
+     * @return
+     */
     public long countAllLostCards(){
         LostStuCardExample lostStuCardExample = new LostStuCardExample();
         lostStuCardExample.createCriteria().andStateNotEqualTo(CANCEL);
         return lostStuCardMapper.countByExample(lostStuCardExample);
     }
 
+    /**
+     * 所有已经找到的卡片的数量
+     * @return
+     */
     public long countAllFindLostCards(){
         LostStuCardExample lostStuCardExample = new LostStuCardExample();
-        lostStuCardExample.createCriteria().andStateNotEqualTo(HAS_CLAIMED);
+        lostStuCardExample.createCriteria().andStateEqualTo(HAS_CLAIMED);
         return lostStuCardMapper.countByExample(lostStuCardExample);
     }
 }

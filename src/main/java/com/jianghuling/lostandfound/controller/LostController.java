@@ -158,8 +158,9 @@ public class LostController {
 
         List<LostTemplate> lostList = new ArrayList<>();
         dataResort(lostList,lostItemService.myPickItemsSpecState(userId,Constant.NO_CLAIM), lostCardService.myPickCardSpecState(userId,Constant.NO_CLAIM));
-        dataResort(lostList,lostItemService.myPickItemsSpecState(userId,Constant.CANCEL), lostCardService.myPickCardSpecState(userId,Constant.CANCEL));
         dataResort(lostList,lostItemService.myPickItemsSpecState(userId,Constant.HAS_CLAIMED), lostCardService.myPickCardSpecState(userId,Constant.HAS_CLAIMED));
+        dataResort(lostList,lostItemService.myPickItemsSpecState(userId,Constant.CANCEL), lostCardService.myPickCardSpecState(userId,Constant.CANCEL));
+
         return paging(lostList,pageNo,pageSize);
 
 
@@ -168,10 +169,10 @@ public class LostController {
     @RequestMapping("/myLost")
     public LostResultMessage myLost(String userId, int pageNo, int pageSize) {
         List<LostTemplate> lostList = new ArrayList<>();
-        dataResort(lostList,lostItemService.myLostItemSpecState(userId,Constant.NO_CLAIM), lostCardService.myLostCardSpecState(userId,Constant.NO_CLAIM));
-        dataResort(lostList,lostItemService.myLostItemSpecState(userId,Constant.CANCEL), lostCardService.myLostCardSpecState(userId,Constant.CANCEL));
-        dataResort(lostList,lostItemService.myLostItemSpecState(userId,Constant.HAS_CLAIMED), lostCardService.myLostCardSpecState(userId,Constant.HAS_CLAIMED));
-
+//        dataResort(lostList,lostItemService.myLostItemSpecState(userId,Constant.NO_CLAIM), lostCardService.myLostCardSpecState(userId,Constant.NO_CLAIM));
+//        dataResort(lostList,lostItemService.myLostItemSpecState(userId,Constant.CANCEL), lostCardService.myLostCardSpecState(userId,Constant.CANCEL));
+//        dataResort(lostList,lostItemService.myLostItemSpecState(userId,Constant.HAS_CLAIMED), lostCardService.myLostCardSpecState(userId,Constant.HAS_CLAIMED));
+        dataResort(lostList,lostItemService.myLostItem(userId),lostCardService.myLostCard(userId));
         return paging(lostList,pageNo,pageSize);
     }
 

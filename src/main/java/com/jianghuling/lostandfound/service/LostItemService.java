@@ -154,24 +154,39 @@ public class LostItemService {
         return lostItemMapper.selectByExample(lostItemExample);
     }
 
+    /**
+     * 我丢失的物品，状态只能是认领的
+     * @param userId
+     * @return
+     */
     public List<LostItem> myLostItem(String userId){
         LostItemExample lostItemExample =new LostItemExample();
-        lostItemExample.createCriteria().andTakerIdEqualTo(userId).andStateEqualTo(NO_CLAIM);
+        lostItemExample.createCriteria().andTakerIdEqualTo(userId).andStateEqualTo(HAS_CLAIMED);
         return lostItemMapper.selectByExample(lostItemExample);
     }
 
     public List<LostItem> myLostItemSpecState(String userId,Byte state){
         LostItemExample lostItemExample =new LostItemExample();
-        lostItemExample.createCriteria().andTakerIdEqualTo(userId).andStateNotEqualTo(NO_CLAIM).andStateEqualTo(state);
+        lostItemExample.createCriteria().andTakerIdEqualTo(userId).andStateEqualTo(state);
         return lostItemMapper.selectByExample(lostItemExample);
     }
 
+    /**
+     * 我丢失的物品的数量，状态只能是认领的
+     * @param userId
+     * @return
+     */
     public long myLostItemCount(String userId){
         LostItemExample lostItemExample = new LostItemExample();
-        lostItemExample.createCriteria().andTakerIdEqualTo(userId).andStateNotEqualTo(NO_CLAIM);
+        lostItemExample.createCriteria().andTakerIdEqualTo(userId).andStateEqualTo(HAS_CLAIMED);
         return lostItemMapper.countByExample(lostItemExample);
     }
 
+    /**
+     * 我捡到的，数量不包含取消的
+     * @param userId
+     * @return
+     */
     public long myPickItemCount(String userId){
         LostItemExample lostItemExample = new LostItemExample();
         lostItemExample.createCriteria().andReleaserIdEqualTo(userId).andStateNotEqualTo(CANCEL);
@@ -184,6 +199,9 @@ public class LostItemService {
         LostItem lostItem = lostItemMapper.selectByPrimaryKey(itemId);
         lostItem.setItemId(itemId);
         lostItem.setState(NO_CLAIM);
+        lostItem.setUpdateTime(new Timestamp(new Date().getTime()));
+        LostItemExample lostItemExample = new LostItemExample();
+        lostItemExample.createCriteria().andStateEqualTo(HAS_CLAIMED).andItemIdEqualTo(itemId);
 
         ESLostItem esLostItem = new ESLostItem();
         esLostItem.setItemDesc(lostItem.getItemDesc());
@@ -192,7 +210,7 @@ public class LostItemService {
         esLostItem.setItemPicture(lostItem.getItemPicture());
         esLostItem.setTakePlace(lostItem.getTakePlace());
         esLostItemRepository.save(esLostItem);
-        if(lostItemMapper.updateByPrimaryKey(lostItem)==1){
+        if(lostItemMapper.updateByExample(lostItem,lostItemExample)==1){
             return true;
         }else{
             return false;
@@ -206,7 +224,7 @@ public class LostItemService {
     }
     public long countAllFindItems(){
         LostItemExample lostItemExample = new LostItemExample();
-        lostItemExample.createCriteria().andStateNotEqualTo(HAS_CLAIMED);
+        lostItemExample.createCriteria().andStateEqualTo(HAS_CLAIMED);
         return lostItemMapper.countByExample(lostItemExample);
     }
 }
