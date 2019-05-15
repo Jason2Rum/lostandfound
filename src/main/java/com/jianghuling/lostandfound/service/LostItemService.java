@@ -74,18 +74,18 @@ public class LostItemService {
         if (picFile.isEmpty()) {
             return false;
         } else {
+            String namePrefix = UUID.randomUUID().toString().substring(0,7);
             String oriFileName = picFile.getOriginalFilename();
             String time = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
             String fileName = time + oriFileName.substring(oriFileName.lastIndexOf("."));
-            File dest = new File(UPLOAD_IMG_LOC + fileName);
-            File temp = new File(UPLOAD_IMG_LOC +"temp"+ fileName);
+            File dest = new File(UPLOAD_IMG_LOC + namePrefix+fileName);
+            File temp = new File(UPLOAD_IMG_LOC +"temp"+UUID.randomUUID().toString().substring(0,6)+ fileName);
             picFile.transferTo(temp);
             if (!dest.getParentFile().exists()) {
                 dest.getParentFile().mkdirs();
             }
             Thumbnails.of(temp)
                     .scale(1f)
-                    .outputFormat("jpg")
                     .outputQuality(0.5f)
                     .toFile(dest);//图片压缩
 
@@ -97,7 +97,7 @@ public class LostItemService {
             lostItem.setTakePlace(claimMethod);
             lostItem.setState(NO_CLAIM);
             lostItem.setItemDesc(desc);
-            lostItem.setItemPicture("http://jianghuling.top/lostimages/"+ UUID.randomUUID().toString().substring(0,10)+dest.getName());
+            lostItem.setItemPicture("http://jianghuling.top/lostimages/"+ dest.getName());
             lostItem.setReleaseTime(new Timestamp(new Date().getTime()));
             lostItem.setReleaserId(userId);
             //发布时间数据库有默认的now()
@@ -126,31 +126,49 @@ public class LostItemService {
     @Transactional
     public boolean cancelPublish(String itemId){
         LostItem lostItem = new LostItem();
-        lostItem.setItemId(itemId);
         lostItem.setState(CANCEL);
-        esLostItemRepository.deleteById(itemId);//从es中删除索引
-        if(lostItemMapper.updateByPrimaryKeySelective(lostItem)==1){
+        LostItemExample lostItemExample = new LostItemExample();
+        lostItemExample.createCriteria().andItemIdEqualTo(itemId).andStateNotEqualTo(HAS_CLAIMED);
+        if(lostItemMapper.updateByExampleSelective(lostItem,lostItemExample)==1){
+            esLostItemRepository.deleteById(itemId);//从es中删除索引
             return true;
         }else{
             return false;
         }
     }
 
+    /**
+     *  我捡到的
+     * @param userId
+     * @return
+     */
     public List<LostItem> myPickItems(String userId){
         LostItemExample lostItemExample =new LostItemExample();
         lostItemExample.createCriteria().andReleaserIdEqualTo(userId);//也显示取消的
         return lostItemMapper.selectByExample(lostItemExample);
     }
 
+    public List<LostItem> myPickItemsSpecState(String userId,Byte state){
+        LostItemExample lostItemExample =new LostItemExample();
+        lostItemExample.createCriteria().andReleaserIdEqualTo(userId).andStateEqualTo(state);
+        return lostItemMapper.selectByExample(lostItemExample);
+    }
+
     public List<LostItem> myLostItem(String userId){
         LostItemExample lostItemExample =new LostItemExample();
-        lostItemExample.createCriteria().andTakerIdEqualTo(userId).andStateNotEqualTo(NO_CLAIM);
+        lostItemExample.createCriteria().andTakerIdEqualTo(userId).andStateEqualTo(NO_CLAIM);
+        return lostItemMapper.selectByExample(lostItemExample);
+    }
+
+    public List<LostItem> myLostItemSpecState(String userId,Byte state){
+        LostItemExample lostItemExample =new LostItemExample();
+        lostItemExample.createCriteria().andTakerIdEqualTo(userId).andStateNotEqualTo(NO_CLAIM).andStateEqualTo(state);
         return lostItemMapper.selectByExample(lostItemExample);
     }
 
     public long myLostItemCount(String userId){
         LostItemExample lostItemExample = new LostItemExample();
-        lostItemExample.createCriteria().andTakerIdEqualTo(userId);
+        lostItemExample.createCriteria().andTakerIdEqualTo(userId).andStateNotEqualTo(NO_CLAIM);
         return lostItemMapper.countByExample(lostItemExample);
     }
 
@@ -179,5 +197,16 @@ public class LostItemService {
         }else{
             return false;
         }
+    }
+
+    public long countAllLostItems(){
+        LostItemExample lostItemExample = new LostItemExample();
+        lostItemExample.createCriteria().andStateNotEqualTo(CANCEL);
+        return lostItemMapper.countByExample(lostItemExample);
+    }
+    public long countAllFindItems(){
+        LostItemExample lostItemExample = new LostItemExample();
+        lostItemExample.createCriteria().andStateNotEqualTo(HAS_CLAIMED);
+        return lostItemMapper.countByExample(lostItemExample);
     }
 }

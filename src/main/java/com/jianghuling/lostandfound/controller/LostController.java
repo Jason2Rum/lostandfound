@@ -6,10 +6,7 @@ import com.jianghuling.lostandfound.model.ESLostItem;
 import com.jianghuling.lostandfound.model.LostItem;
 import com.jianghuling.lostandfound.model.LostStuCard;
 import com.jianghuling.lostandfound.model.LostTemplate;
-import com.jianghuling.lostandfound.result.LostCardListResultMessage;
-import com.jianghuling.lostandfound.result.LostItemListResultMessage;
-import com.jianghuling.lostandfound.result.LostResultMessage;
-import com.jianghuling.lostandfound.result.ResultMessage;
+import com.jianghuling.lostandfound.result.*;
 import com.jianghuling.lostandfound.service.LostCardService;
 import com.jianghuling.lostandfound.service.LostItemService;
 import lombok.extern.slf4j.Slf4j;
@@ -80,15 +77,19 @@ public class LostController {
             resultMessage.setCode(Constant.SUCCESS);
         } else {
             resultMessage.setCode(Constant.FAIL);
-            resultMessage.setMessage("已被其他人领取");
+            resultMessage.setMessage("已被他人认领或被发布者取消");
         }
         return resultMessage;
     }
 
     @RequestMapping("/claim/card")
     public ResultMessage claimCard(String userId, String cardId) {
-        lostCardService.claimCard(userId, cardId);
-        resultMessage.setCode(Constant.SUCCESS);
+        if (lostCardService.claimCard(userId, cardId)) {
+            resultMessage.setCode(Constant.SUCCESS);
+        }else {
+            resultMessage.setCode(Constant.FAIL);
+            resultMessage.setMessage("已被他人认领或被发布者取消");
+        }
         return resultMessage;
     }
 
@@ -147,31 +148,35 @@ public class LostController {
             resultMessage.setCode(Constant.SUCCESS);
         } else {
             resultMessage.setCode(Constant.FAIL);
-            resultMessage.setMessage("取消失败");
+            resultMessage.setMessage("已被他人认领，无法取消");
         }
         return resultMessage;
     }
 
     @RequestMapping("/myPick")
     public LostResultMessage myPick(String userId, int pageNo, int pageSize) {
-        List<LostItem> lostItems = lostItemService.myPickItems(userId);
-        List<LostStuCard> lostStuCards = lostCardService.myPickCard(userId);
 
-        return dataResort(lostItems, lostStuCards, pageNo, pageSize);
+        List<LostTemplate> lostList = new ArrayList<>();
+        dataResort(lostList,lostItemService.myPickItemsSpecState(userId,Constant.NO_CLAIM), lostCardService.myPickCardSpecState(userId,Constant.NO_CLAIM));
+        dataResort(lostList,lostItemService.myPickItemsSpecState(userId,Constant.CANCEL), lostCardService.myPickCardSpecState(userId,Constant.CANCEL));
+        dataResort(lostList,lostItemService.myPickItemsSpecState(userId,Constant.HAS_CLAIMED), lostCardService.myPickCardSpecState(userId,Constant.HAS_CLAIMED));
+        return paging(lostList,pageNo,pageSize);
+
 
     }
 
     @RequestMapping("/myLost")
     public LostResultMessage myLost(String userId, int pageNo, int pageSize) {
-        List<LostItem> lostItems = lostItemService.myLostItem(userId);
-        List<LostStuCard> lostStuCards = lostCardService.myLostCard(userId);
-        return dataResort(lostItems, lostStuCards, pageNo, pageSize);
+        List<LostTemplate> lostList = new ArrayList<>();
+        dataResort(lostList,lostItemService.myLostItemSpecState(userId,Constant.NO_CLAIM), lostCardService.myLostCardSpecState(userId,Constant.NO_CLAIM));
+        dataResort(lostList,lostItemService.myLostItemSpecState(userId,Constant.CANCEL), lostCardService.myLostCardSpecState(userId,Constant.CANCEL));
+        dataResort(lostList,lostItemService.myLostItemSpecState(userId,Constant.HAS_CLAIMED), lostCardService.myLostCardSpecState(userId,Constant.HAS_CLAIMED));
+
+        return paging(lostList,pageNo,pageSize);
     }
 
-    private LostResultMessage dataResort(List<LostItem> lostItems, List<LostStuCard> lostStuCards, int pageNo, int pageSize) {
-
-        List<LostTemplate> lostList = new ArrayList<>();
-
+    private void dataResort(List <LostTemplate> lostList,List<LostItem> lostItems, List<LostStuCard> lostStuCards) {
+        int sortStartIndex = lostList.size();
         for (LostItem o : lostItems) {
             LostTemplate temp = new LostTemplate();
             temp.setCategory(o.getCategory());
@@ -192,18 +197,9 @@ public class LostController {
             temp.setReleaseTime(o.getReleaseTime());
             lostList.add(temp);
         }
-        Collections.sort(lostList);
-        if (lostList.size()>= pageSize * (pageNo + 1)) {
-            lostResultMessage.setLostList(lostList.subList(pageNo * pageSize, pageSize * (pageNo + 1)));
+        List<LostTemplate> temp = lostList.subList(sortStartIndex,lostList.size());
+        Collections.sort(temp);
 
-        } else if(lostList.size()>pageSize*pageNo) {
-            lostResultMessage.setLostList(lostList.subList(pageNo * pageSize,lostList.size()));
-        }else{
-            lostList = new ArrayList<>();
-            lostResultMessage.setLostList(lostList);
-        }
-        lostResultMessage.setCode(Constant.SUCCESS);
-        return lostResultMessage;
     }
 
     @RequestMapping("/cancelClm")
@@ -221,6 +217,29 @@ public class LostController {
             resultMessage.setMessage("取消失败");
         }
         return resultMessage;
+    }
+
+    @RequestMapping("/statistics")
+    public StatisticsResultMessage statistics(){
+        StatisticsResultMessage statisticsResultMessage = new StatisticsResultMessage();
+        statisticsResultMessage.setFindNum(lostCardService.countAllFindLostCards()+lostItemService.countAllFindItems());
+        statisticsResultMessage.setLostNum(lostCardService.countAllLostCards()+lostItemService.countAllLostItems());
+        statisticsResultMessage.setCode(Constant.SUCCESS);
+        return statisticsResultMessage;
+    }
+
+    private LostResultMessage paging(List<LostTemplate> lostList,int pageNo,int pageSize){
+        if (lostList.size()>= pageSize * (pageNo + 1)) {
+            lostResultMessage.setLostList(lostList.subList(pageNo * pageSize, pageSize * (pageNo + 1)));
+
+        } else if(lostList.size()>pageSize*pageNo) {
+            lostResultMessage.setLostList(lostList.subList(pageNo * pageSize,lostList.size()));
+        }else{
+            lostList = new ArrayList<>();
+            lostResultMessage.setLostList(lostList);
+        }
+        lostResultMessage.setCode(Constant.SUCCESS);
+        return lostResultMessage;
     }
 
 }

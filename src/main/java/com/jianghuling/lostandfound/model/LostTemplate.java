@@ -3,9 +3,11 @@ package com.jianghuling.lostandfound.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.jianghuling.lostandfound.Constant;
 
 import java.util.Date;
+
+import static com.jianghuling.lostandfound.Constant.NO_CLAIM;
+
 
 public class LostTemplate implements Comparable {
     private String category;
@@ -65,14 +67,23 @@ public class LostTemplate implements Comparable {
         this.id = id;
     }
 
+    /**
+     * 返回-1：把“我”排到前面
+     *
+     * @param o
+     * @return
+     */
     @Override
     public int compareTo(Object o) {
         LostTemplate temp = (LostTemplate) o;
-//        if (temp.getState().equals(Constant.CANCEL) && state.equals(Constant.NO_CLAIM)) {
-//            return 1;
+//        if (state.equals(NO_CLAIM) && !((LostTemplate) o).getState().equals(NO_CLAIM)) {
+//            return -1;
+//        } else {
+            if (releaseTime.getTime() > temp.getReleaseTime().getTime())
+                return -1;//当前发布时间比较大，应该把当前记录放到前面，因为默认是升序排序，返回-1则是相当于欺骗系统当前记录小
+            else if (temp.getReleaseTime().getTime() == releaseTime.getTime()) return 0;
+            else return 1;
 //        }
-        if (temp.getReleaseTime().getTime() > releaseTime.getTime()) return -1;
-        else if (temp.getReleaseTime().getTime() == releaseTime.getTime()) return 0;
-        else return 1;
+
     }
 }

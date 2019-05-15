@@ -43,6 +43,7 @@ public class LostCardService {
         lostStuCard.setReleaserId(userId);
         lostStuCard.setTakePlace(takePlace);
         lostStuCard.setName(name);
+        lostStuCard.setState(NO_CLAIM);
         lostStuCard.setStuId(stuId);
         lostStuCard.setReleaseTime(new Time(new Date().getTime()));
         lostStuCardMapper.insert(lostStuCard);
@@ -67,20 +68,24 @@ public class LostCardService {
     @Transactional
     public boolean claimCard(String userId,String cardId){
         LostStuCard lostStuCard = new LostStuCard();
-        lostStuCard.setId(cardId);
         lostStuCard.setTakeTime(new Timestamp(new Date().getTime()));
         lostStuCard.setTakerId(userId);
         lostStuCard.setState(HAS_CLAIMED);
-        lostStuCardMapper.updateByPrimaryKeySelective(lostStuCard);
-        return true;
+
+        LostStuCardExample lostStuCardExample = new LostStuCardExample();
+        lostStuCardExample.createCriteria().andIdEqualTo(cardId).andStateEqualTo(NO_CLAIM);
+        if(lostStuCardMapper.updateByExampleSelective(lostStuCard,lostStuCardExample)==1){
+            return true;
+        }else return false;
     }
 
     @Transactional
     public boolean cancelPublish(String cardId){
         LostStuCard lostStuCard = new LostStuCard();
-        lostStuCard.setId(cardId);
         lostStuCard.setState(CANCEL);
-        if(lostStuCardMapper.updateByPrimaryKeySelective(lostStuCard)==1){
+        LostStuCardExample lostStuCardExample = new LostStuCardExample();
+        lostStuCardExample.createCriteria().andIdEqualTo(cardId).andStateNotEqualTo(HAS_CLAIMED);
+        if(lostStuCardMapper.updateByExample(lostStuCard,lostStuCardExample)==1){
             return true;
         }else{
             return false;
@@ -93,9 +98,22 @@ public class LostCardService {
         return lostStuCardMapper.selectByExample(lostStuCardExample);
     }
 
+    public List<LostStuCard> myPickCardSpecState(String userId,Byte state){
+        LostStuCardExample lostStuCardExample = new LostStuCardExample();
+        lostStuCardExample.createCriteria().andReleaserIdEqualTo(userId).andStateEqualTo(state);
+        return lostStuCardMapper.selectByExample(lostStuCardExample);
+    }
+
+
     public List<LostStuCard> myLostCard(String userId){
         LostStuCardExample lostStuCardExample = new LostStuCardExample();
         lostStuCardExample.createCriteria().andTakerIdEqualTo(userId);
+        return lostStuCardMapper.selectByExample(lostStuCardExample);
+    }
+
+    public List<LostStuCard> myLostCardSpecState(String userId,Byte state){
+        LostStuCardExample lostStuCardExample = new LostStuCardExample();
+        lostStuCardExample.createCriteria().andTakerIdEqualTo(userId).andStateEqualTo(state);
         return lostStuCardMapper.selectByExample(lostStuCardExample);
     }
 
@@ -119,6 +137,18 @@ public class LostCardService {
         if(lostStuCardMapper.updateByPrimaryKeySelective(lostStuCard)==1){
             return true;
         }else return false;
+    }
+
+    public long countAllLostCards(){
+        LostStuCardExample lostStuCardExample = new LostStuCardExample();
+        lostStuCardExample.createCriteria().andStateNotEqualTo(CANCEL);
+        return lostStuCardMapper.countByExample(lostStuCardExample);
+    }
+
+    public long countAllFindLostCards(){
+        LostStuCardExample lostStuCardExample = new LostStuCardExample();
+        lostStuCardExample.createCriteria().andStateNotEqualTo(HAS_CLAIMED);
+        return lostStuCardMapper.countByExample(lostStuCardExample);
     }
 }
 
