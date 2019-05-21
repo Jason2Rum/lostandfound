@@ -1,5 +1,10 @@
 server:
-  port: 80
+  port: 443
+  ssl:
+    key-store: classpath:lostandfound.p12
+    key-store-password: 1eOvxsp1
+    key-store-type: JKS
+    enabled: true
   tomcat:
     accesslog:
       buffered: true

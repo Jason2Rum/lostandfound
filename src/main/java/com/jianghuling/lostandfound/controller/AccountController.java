@@ -45,10 +45,12 @@ public class AccountController {
         try {
             ResultMessage tempMsg = accountService.login(jscode);
             loginResultMessage.setUserId(tempMsg.getMessage());//service中将userid存储在message中
-            loginResultMessage.setCode(Constant.SUCCESS);
 
-            if (tempMsg.getCode() == Constant.SUCCESS) {//不是第一次登录
+            if (tempMsg.getCode() == Constant.FIRST_LOG_IN) {//不是第一次登录
+                loginResultMessage.setCode(Constant.FIRST_LOG_IN);
                 loginResultMessage.setLostCardList(lostCardService.getLostCardList(0, 10));
+            }else{
+                loginResultMessage.setCode(Constant.SUCCESS);
             }
 
         } catch (Exception e) {
