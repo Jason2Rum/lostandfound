@@ -120,15 +120,16 @@ public class LostController {
     }
 
     @RequestMapping("/searchItem")
-    public LostItemListResultMessage searchItem(String description) {
+    public LostItemListResultMessage searchItem(String desc) {
         List<LostItem> lostItemList = new ArrayList<>();
-        List<ESLostItem> searchList = lostItemService.search(description);
+        List<ESLostItem> searchList = lostItemService.search(desc);
         for (ESLostItem esLostItem : searchList) {
             LostItem lostItem = new LostItem();
             lostItem.setItemId(esLostItem.getItemId());
             lostItem.setItemPicture(esLostItem.getItemPicture());
             lostItem.setItemDesc(esLostItem.getItemDesc());
             lostItem.setTakePlace(esLostItem.getTakePlace());
+            lostItem.setCategory(esLostItem.getCategory());
             lostItemList.add(lostItem);
         }
         lostItemListResultMessage.setLostItemList(lostItemList);

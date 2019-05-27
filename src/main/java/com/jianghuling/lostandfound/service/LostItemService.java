@@ -63,8 +63,11 @@ public class LostItemService {
         LostItemExample lostItemExample = new LostItemExample();
         lostItemExample.createCriteria().andStateEqualTo(NO_CLAIM).andItemIdEqualTo(itemId);
 
-        if (lostItemMapper.updateByExampleSelective(claimItem, lostItemExample) == 1)
+
+        if (lostItemMapper.updateByExampleSelective(claimItem, lostItemExample) == 1){
+            esLostItemRepository.deleteById(itemId);//从es中删除索引
             return true;
+        }
         else return false;
     }
 
@@ -106,6 +109,7 @@ public class LostItemService {
             /*------插入到索引------------*/
             ESLostItem esLostItem = new ESLostItem();
             esLostItem.setItemDesc(desc);
+            esLostItem.setCategory(category);
             esLostItem.setItemId(lostItem.getItemId());
             esLostItem.setReleaseTime(lostItem.getReleaseTime());
             esLostItem.setItemPicture(lostItem.getItemPicture());
@@ -207,10 +211,11 @@ public class LostItemService {
         lostItem.setUpdateTime(new Timestamp(new Date().getTime()));
         LostItemExample lostItemExample = new LostItemExample();
         lostItemExample.createCriteria().andStateEqualTo(HAS_CLAIMED).andItemIdEqualTo(itemId);
-
+        /*重新插入索引*/
         ESLostItem esLostItem = new ESLostItem();
         esLostItem.setItemDesc(lostItem.getItemDesc());
         esLostItem.setItemId(lostItem.getItemId());
+        esLostItem.setCategory(lostItem.getCategory());
         esLostItem.setReleaseTime(lostItem.getReleaseTime());
         esLostItem.setItemPicture(lostItem.getItemPicture());
         esLostItem.setTakePlace(lostItem.getTakePlace());
